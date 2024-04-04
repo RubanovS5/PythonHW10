@@ -11,7 +11,7 @@ class Sum:
 
     @allure.step("Подсчет суммы покупок")
     def buy(self):
-        price = WebDriverWait(self.driver, 10, 0.1).until(EC.visibility_of_element_located((By.XPATH, "//div[@class='summary_info_label summary_total_label']"))).text
+        price = WebDriverWait(self.driver, 10, 0.1).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".summary_total_label"))).text
         return(price)
     
     @allure.step("Выход из браузера")
