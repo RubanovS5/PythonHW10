@@ -10,6 +10,7 @@ url = "https://x-clients-be.onrender.com"
 sql = employeeTable(db_connection_string)
 api = EmployeeApi(url)
 
+
 @allure.title("Создание нового сотрудника")
 @allure.description("Создание нового сотрудника и проверка,что компания и сотрдуник создались с корректными данными")
 @allure.feature("CREATE")
@@ -36,10 +37,10 @@ def test_create_new_employee():
     employee_after = sql.get_employee_id(company_id)
     assert len(employee_after) > len(employee_before)
     with allure.step("Проверка названия компании"):
-        assert sql.get_company()[-1]["name"] == "Туры"
+        assert sql.get_company()[4] == "Туры"
 
     with allure.step("Проверка описания компании"):
-        assert sql.get_company()[-1]["description"] == "Туры на Сахалин"
+        assert sql.get_company()[5] == "Туры на Сахалин"
 
     with allure.step("Проверка имени сотрудника"):
         assert sql.get_employee()[-1]["first_name"] == 'Sasha'
@@ -98,11 +99,12 @@ def test_change_employee():
         change_active = False
     )
     employee_id = sql.get_employee_max_id()
+
     with allure.step("Проверка названия компании"):
-        assert sql.get_company()[-1]["name"] == "ООО Лянча"
+        assert sql.get_company()[4] == "ООО Лянча"
 
     with allure.step("Проверка описания компании"):
-        assert sql.get_company()[-1]["description"] == "Итальянские машины"
+        assert sql.get_company()[5] == "Итальянские машины"
 
     with allure.step("Проверка измененной фамилии сотрудника"):
         assert sql.get_employee()[-1]["last_name"] == 'Брюлов'
