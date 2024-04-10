@@ -5,7 +5,7 @@ import allure
 
 class employeeTable:
     __scripts = {
-        "get company": text("select * from company order by id desc"),
+        "get company": text("select * from company"),
         "get employee": text("select * from employee"),
         "max id employee": text("select max(id) from employee"),
         "get employee id": text("select * from employee where company_id = :company_id"),
@@ -24,7 +24,7 @@ class employeeTable:
     @allure.step("БД.Получение списка компаний")
     def get_company(self):
         with self.db.connect() as conn:
-            return conn.execute(self.__scripts["get company"]).fetchall()[0]
+            return conn.execute(self.__scripts["get company"]).fetchall()
     
     @allure.step("БД.Получение списка сотрудников")
     def get_employee(self):
@@ -32,7 +32,7 @@ class employeeTable:
             return conn.execute(self.__scripts["get employee"]).fetchall()
     
     @allure.step("БД.Получение сотрудника по ID - {company_id}")
-    def get_employee_id(self,company_id):
+    def get_employee_id(self, company_id):
         with self.db.connect() as conn:
             return conn.execute(self.__scripts["get employee id"],company_id = company_id).fetchall()
     
@@ -44,7 +44,7 @@ class employeeTable:
     @allure.step("БД.Созадние компании {name}({description})")
     def create_company(self,name,description):
         with self.db.connect() as conn:
-            conn.execute(self.__scripts["insert company"], new_name = name, nem_descr = description)
+            conn.execute(self.__scripts["insert company"],new_name = name, nem_descr = description)
 
     @allure.step("БД.Удаление компании по ID - {id}")
     def delete_company(self, id):
