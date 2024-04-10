@@ -1,4 +1,3 @@
-
 from employeeTable import employeeTable
 import datetime
 import requests
@@ -35,12 +34,17 @@ def test_create_new_employee():
     )
     employee_id = sql.get_employee_max_id()
     employee_after = sql.get_employee_id(company_id)
-    assert len(employee_after) > len(employee_before)
+    employee_after = sql.get_employee_id(company_id)
+    employee_after = sql.get_employee_id(company_id)
+
+    with allure.step("Проверка,что список сотрудников ПОЛСЕ добавления больше,чем список сотрудникнов ДО добавления"):
+        assert len(employee_after) > len(employee_before)
+
     with allure.step("Проверка названия компании"):
-        assert sql.get_company()[4] == "Туры"
+        assert sql.get_company()[-1]["name"] == "Туры"
 
     with allure.step("Проверка описания компании"):
-        assert sql.get_company()[5] == "Туры на Сахалин"
+        assert sql.get_company()[-1]["description"] == "Туры на Сахалин"
 
     with allure.step("Проверка имени сотрудника"):
         assert sql.get_employee()[-1]["first_name"] == 'Sasha'
@@ -53,7 +57,7 @@ def test_create_new_employee():
 
     with allure.step("Проверка email сотрудника"):
         assert sql.get_employee()[-1]["email"] == None
-
+    
     with allure.step("Проверка url сотрудника"):
         assert sql.get_employee()[-1]["avatar_url"] == 'http://example.com'
 
@@ -63,10 +67,14 @@ def test_create_new_employee():
     with allure.step("Проверка даты рождения сотрудника"):
         assert sql.get_employee()[-1]["birthdate"] == datetime.date(2024, 3, 22)
 
-    with allure.step("Проверка,что компания имеет статуст True"):
+    with allure.step("Проверка,что компания имеет статус True"):
         assert sql.get_employee()[-1]["is_active"] == True
+
+
     sql.delete_employee(employee_id)
     sql.delete_company(company_id)
+
+
 
 @allure.title("Обновление данных сотрудника")
 @allure.description("Обновление некоторых данных сотрудника и проверка,что все данные успешно внесены в БД")
@@ -101,27 +109,25 @@ def test_change_employee():
     employee_id = sql.get_employee_max_id()
 
     with allure.step("Проверка названия компании"):
-        assert sql.get_company()[4] == "ООО Лянча"
+        assert sql.get_company()[-1]["name"] == "ООО Лянча"
 
-    with allure.step("Проверка описания компании"):
-        assert sql.get_company()[5] == "Итальянские машины"
+    with allure.step("Проверка описания компании"):       
+        assert sql.get_company()[-1]["description"] == "Итальянские машины"
 
-    with allure.step("Проверка измененной фамилии сотрудника"):
+    with allure.step("Проверка фамилии сотрудника"):
         assert sql.get_employee()[-1]["last_name"] == 'Брюлов'
 
-    with allure.step("Проверка измененного email"):
+    with allure.step("Проверка email сотрудника"):
         assert sql.get_employee()[-1]["email"] =='samurai@cyber.ru'
 
-    with allure.step("Проверка изменненого url"):
+    with allure.step("Проверка url сотрудника"):
         assert sql.get_employee()[-1]["avatar_url"] == 'https://www.google.ru/'
 
-    with allure.step("Проверка измененного номера телефона"):
+    with allure.step("Проверка номера телефона сотрудника"):
         assert sql.get_employee()[-1]["phone"] == '88709087654'
 
-    with allure.step("Проверка,что компания имеет статус False"):
+    with allure.step("Проверка даты рождения сотрудника"):
         assert sql.get_employee()[-1]["is_active"] == False
-
-    
 
     sql.delete_employee(employee_id)
     sql.delete_company(company_id)
